@@ -1,0 +1,103 @@
+<%- include('./include/header.ejs'); -%>
+        <div id="rs-services" class="rs-services style2 gray-bg pt-100 pb-100 md-pt-70 md-pb-70">
+            <div class="container">
+                <div class="rs-contact contact-style2 bg11 pt-95 pb-100 md-pt-65 md-pb-70">
+                    <div class="container">
+                        <div class="sec-title2 d-flex justify-content-center align-items-center mb-60 md-mb-40">
+                            <div class="first-half text-center">
+                                <div class="sub-text">Kayıt Ol</div>
+                                <h2 class="title mb-0 md-pb-20">
+                                    Lütfen kayıt olun
+                                </h2>
+                            </div>
+                        </div>
+                        <div class="row y-middle">
+                            <div class="col-lg-6 md-mb-50">
+                                <div class="contact-img text-center">
+                                    <img src="https://img.freepik.com/free-vector/unlock-with-password-mobile-authentication-vector-icon_116137-3428.jpg?size=338&ext=jpg&ga=GA1.2.1238531653.1650882342" alt="Contact">
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="contact-wrap">
+                                    <div id="form-messages"></div>
+                                    <form id="register-form" method="post">
+                                        <fieldset>
+                                            <div class="row">
+                                                <div class="col-lg-12 col-md-12 col-sm-12 mb-30">
+                                                    <input class="from-control" type="text" id="name" name="name" placeholder="İsim" required="">
+                                                </div>
+                                                <div class="col-lg-12 col-md-12 col-sm-12 mb-30">
+                                                    <input class="from-control" type="text" id="surname" name="surname" placeholder="Soyisim" required="">
+                                                </div>
+                                                <div class="col-lg-12 col-md-12 col-sm-12 mb-30">
+                                                    <input class="from-control" type="email" id="email" name="email" placeholder="Email" required="">
+                                                </div>
+                                                <div class="col-lg-12 col-md-12 col-sm-12 mb-30">
+                                                    <input class="from-control" type="password" id="password" name="password" placeholder="Şifre" required="">
+                                                </div>
+                                                <div class="col-lg-12 col-md-12 col-sm-12 mb-30">
+                                                    <input class="from-control" type="password" id="confirmPassword" name="confirmPassword" placeholder="Şifre Tekrar" required="">
+                                                </div>
+                                            </div>
+                                            <div class="btn-part">
+                                                <div class="form-group mb-0">
+                                                    <input class="readon submit" type="submit" value="Kayıt Ol">
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+<%- include('./include/footer.ejs'); -%>
+<script>
+    function serializeConvertToJson(element) {
+        var config = {};
+        jQuery(element).serializeArray().map(function(item) {
+            if ( config[item.name] ) {
+                if ( typeof(config[item.name]) === "string" ) {
+                    config[item.name] = [config[item.name]];
+                }
+                config[item.name].push(item.value);
+            } else {
+                config[item.name] = item.value;
+            }
+        });
+        return config;
+    }
+    $("#register-form").on("submit",(e) => {
+        e.preventDefault();
+        let data = serializeConvertToJson($("#register-form"));
+        $.ajax({
+            url : "<%=baseURL%>/register",
+            type : "POST",
+            data : data,
+            success : (response) => {
+                if (response.status !== "success") {
+                    $("#register-form .error-message").remove();
+                    response.forEach(element => {
+                        for (const iterator of $("#register-form input")) {
+                            if (element.param === $(iterator).attr("name")) {
+                                $(iterator).after(`<div class="text-danger error-message" style="font-size:12px">${element.msg}</div>`)
+                            }
+                        }
+                    });
+                }else{
+                    $(".rs-contact .container div").remove();
+                    $(".rs-contact .container").append(`<div class="text-center">
+                        <h4 class="text-danger">${response.msg}</h4>
+                        <div class="btn-part text-center">
+                            <a href="<%=baseURL%>/login" class="form-group mb-0 d-flex justify-content-center align-items-center">
+                                <input class="readon submit" type="submit" value="Giriş Yap">
+                            </a>
+                        </div>
+                    </div>`);
+                }
+            }
+        })
+    })
+</script>

@@ -1,0 +1,104 @@
+<%- include('./include/header.ejs'); -%>
+<div class="content-wrapper">
+    <div class="container-xxl flex-grow-1 container-p-y">
+        <div class="row">
+            <div class="col-lg-12 mb-4 order-0">
+                <div class="card">
+                    <div class="d-flex align-items-end row">
+                        <div class="col-sm-12">
+                            <div class="card-body">
+                                <div class="row p-0 m-0 p-4">
+                                    <div class="row">
+                                        <div class="col-xl">
+                                            <div class="card password-check-card mb-4 border">
+                                                <div class="card-header d-flex justify-content-between align-items-center">
+                                                    <h5 class="mb-0">Hesap Şifrenizi Girin</h5>
+                                                    <small class="text-muted float-end">Hesaplarınıza ulaşabilmek için şifrenizi girin</small>
+                                                </div>
+                                                <div class="card-body">
+                                                    <form id="password-check-form" method="post">
+                                                        <div class="mb-3">
+                                                            <label class="form-label" for="basic-default-company">Şifre</label>
+                                                            <input type="password" class="form-control" name="password" id="basic-default-company" placeholder="Hesabın şifresini giriniz" />
+                                                        </div>
+                                                        <button type="submit" class="btn btn-primary">Hesaplarımı göster</button>
+                                                    </form>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<!-- / Content -->
+<%- include('./include/footer.ejs'); -%>
+<script>
+    $("#password-check-form").submit(function(e) {
+        e.preventDefault();    
+        $.ajax({
+            url: "<%=baseURL%>/myAccounts/passwordCheck",
+            type: 'POST',
+            data: $(this).serialize(),
+            success: function (response) {
+                if (response.status === "success") {
+                    $(".password-check-card").remove();
+                    $(".col-xl").append(`
+                            
+                    <div class="card my-accounts border">
+                        <h5 class="card-header">Hesaplarım</h5>
+                        <div class="card-body">
+                        <p>Hesaplarınıza buradan erişebilirsiniz</p>
+
+                        </div>
+                    </div>
+                    `);
+                    response.data.forEach(element => {
+                        $(".col-xl .my-accounts .card-body").append(`
+                        
+                        <div class="d-flex mb-3">
+                            <div class="flex-grow-1 row">
+                                <div class="col-8 col-sm-7 mb-sm-0 mb-2">
+                                    <h6 class="mb-0 text-info">${element.description}</h6>
+                                    <small class="text-danger d-block">Kullanıcı adı : ${element.account}</small>
+                                    <small class="text-danger d-block">Şifre : ${element.password}</small>
+                                </div>
+                                <div class="col-4 col-sm-5 text-end">
+                                    <button type="button" data-id="${element._id}" class="btn btn-icon btn-outline-danger deleteAccount">
+                                        <i class="bx bx-trash"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        `)
+                    });
+                    
+
+                }else{
+                    Swal.fire({
+                        icon: response.status,
+                        text: response.msg
+                    })
+                }
+            },
+        });
+    });
+
+
+    $(document).on("click",".deleteAccount",(e) => {
+
+        $.post("<%=baseURL%>/myAccounts/deleteAccount",{ data : $(e.currentTarget).attr("data-id") }, (response) => {
+            Swal.fire({
+                icon: response.status,
+                text: response.msg
+            })
+        })
+    })
+
+
+</script>

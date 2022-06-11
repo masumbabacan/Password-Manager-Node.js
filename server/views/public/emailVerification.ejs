@@ -1,0 +1,91 @@
+<%- include('./include/header.ejs'); -%>
+        <div id="rs-services" class="rs-services style2 gray-bg pt-100 pb-100 md-pt-70 md-pb-70">
+            <div class="container">
+                <div class="rs-contact contact-style2 bg11 pt-95 pb-100 md-pt-65 md-pb-70">
+                    <div class="container">
+                        <div class="sec-title2 d-flex justify-content-center align-items-center mb-60 md-mb-40">
+                            <div class="first-half text-center">
+                                <div class="sub-text">Email Doğrulama</div>
+                                <div class="title mb-0 md-pb-20">
+                                    Lütfen Email adresinize gönderilen doğrulama kodunu girin.
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row y-middle">
+                            <div class="col-lg-6 md-mb-50">
+                                <div class="contact-img text-center">
+                                    <img src="https://img.freepik.com/free-psd/chat-3d-illustration_609002-464.jpg?size=338&ext=jpg&ga=GA1.2.1238531653.1650882342" alt="Contact">
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="contact-wrap">
+                                    <div id="form-messages"></div>
+                                    <form id="verification-form" method="post">
+                                        <% if(data.status === "success"){ %>
+                                            <fieldset>
+                                                <div class="row">
+                                                    <div class="text-success"><%= data.msg %></div>
+                                                    <div class="col-lg-12 col-md-12 col-sm-12 mb-30">
+                                                        <input type="hidden" id="email" name="email" value="<%= data.value %>">
+                                                    </div>
+                                                    <div class="col-lg-12 col-md-12 col-sm-12 mb-30">
+                                                        <input class="from-control" type="text" id="verificationCode" name="verificationCode" placeholder="Doğrulama Kodu" required="">
+                                                    </div>
+                                                </div>
+                                                <div class="btn-part">
+                                                    <div class="form-group mb-0">
+                                                        <input class="readon submit" type="submit" value="Emaili Onayla">
+                                                    </div>
+                                                </div>
+                                            </fieldset>   
+                                        <% } else{ %>
+                                            <div class="text-danger"><%= data.msg %></div>
+                                        <% } %>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+<%- include('./include/footer.ejs'); -%>
+<script>
+    function serializeConvertToJson(element) {
+        var config = {};
+        jQuery(element).serializeArray().map(function(item) {
+            if ( config[item.name] ) {
+                if ( typeof(config[item.name]) === "string" ) {
+                    config[item.name] = [config[item.name]];
+                }
+                config[item.name].push(item.value);
+            } else {
+                config[item.name] = item.value;
+            }
+        });
+        return config;
+    }
+    $("#verification-form").on("submit",(e) => {
+        e.preventDefault();
+        let data = serializeConvertToJson($("#verification-form"));
+        $.ajax({
+            url : "<%=baseURL%>/emailVerification",
+            type : "POST",
+            data : data,
+            success : (response) => {
+                if (response.status === "success") {
+                    Swal.fire({
+                        icon: response.status,
+                        text: response.msg,
+                        confirmButtonText:`<a href="<%=baseURL%>/login" class="text-white"><i class="fa fa-thumbs-up"></i> Giriş Yap</a>`,
+                    })
+                }else{
+                    Swal.fire({
+                        icon: response.status,
+                        text: response.msg
+                    })
+                }
+            }
+        })
+    })
+</script>

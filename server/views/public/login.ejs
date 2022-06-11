@@ -1,0 +1,95 @@
+<%- include('./include/header.ejs'); -%>
+        <div id="rs-services" class="rs-services style2 gray-bg pt-100 pb-100 md-pt-70 md-pb-70">
+            <div class="container">
+                <div class="rs-contact contact-style2 bg11 pt-95 pb-100 md-pt-65 md-pb-70">
+                    <div class="container">
+                        <div class="sec-title2 d-flex justify-content-center align-items-center mb-60 md-mb-40">
+                            <div class="first-half text-center">
+                                <div class="sub-text">Kullanıcı girişi</div>
+                                <h2 class="title mb-0 md-pb-20">
+                                    Lütfen giriş yapın
+                                </h2>
+                            </div>
+                        </div>
+                        <div class="row y-middle">
+                            <div class="col-lg-6 md-mb-50">
+                                <div class="contact-img">
+                                    <img src="https://img.freepik.com/free-vector/account-concept-illustration_114360-399.jpg?t=st=1653384109~exp=1653384709~hmac=3b60a04306188eedc64b90f2ec8826bb92bb9deb74660cdbef8f16daf5163145&w=826" alt="Contact">
+                                </div>
+                            </div>
+                            <div class="col-lg-6">
+                                <div class="contact-wrap">
+                                    <div id="form-messages"></div>
+                                    <form id="login-form" method="post">
+                                        <fieldset>
+                                            <div class="row">
+                                                <div class="col-lg-12 col-md-12 col-sm-12 mb-30">
+                                                    <input class="from-control" type="email" id="email" name="email" placeholder="Email" required="">
+                                                </div>
+                                                <div class="col-lg-12 col-md-12 col-sm-12 mb-30">
+                                                    <input class="from-control" type="password" id="password" name="password" placeholder="Şifre" required="">
+                                                </div>
+                                                <div class="col-lg-12 col-md-12 col-sm-12 mb-30 text-right">
+                                                    <a style="cursor:pointer;" href="<%=baseURL%>/forgotPassword">
+                                                        <i class="fa fa-key"></i>
+                                                        Şifremi unuttum
+                                                    </a>
+                                                </div>
+                                            </div>
+                                            <div class="btn-part">
+                                                <div class="form-group mb-0">
+                                                    <input class="readon submit" type="submit" value="Giriş Yap">
+                                                </div>
+                                            </div>
+                                        </fieldset>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+<%- include('./include/footer.ejs'); -%>
+<script>
+    function serializeConvertToJson(element) {
+        var config = {};
+        jQuery(element).serializeArray().map(function(item) {
+            if ( config[item.name] ) {
+                if ( typeof(config[item.name]) === "string" ) {
+                    config[item.name] = [config[item.name]];
+                }
+                config[item.name].push(item.value);
+            } else {
+                config[item.name] = item.value;
+            }
+        });
+        return config;
+    }
+    $("#login-form").on("submit",(e) => {
+        e.preventDefault();
+        let data = serializeConvertToJson($("#login-form"));
+        $.ajax({
+            url : "<%=baseURL%>/login",
+            type : "POST",
+            data : data,
+            success : (response) => {
+                console.log(response);
+                if (response.status === "success") {
+                    window.location.href = "<%=baseURL%>/"+response.redirect;
+                }else if(response.status === "error"){
+                    Swal.fire({
+                        icon: response.status,
+                        text: response.msg
+                    })
+                }else if(response.status === "emailVerification"){
+                    Swal.fire({
+                        icon: "error",
+                        text: response.msg,
+                        confirmButtonText:`<a href="<%=baseURL%>/${response.redirect}/${response.data}" class="text-white"><i class="fa fa-thumbs-up"></i> Şimdi Doğrula</a>`,
+                    })
+                }
+            }
+        })
+    })
+</script>
