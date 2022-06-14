@@ -73,7 +73,7 @@
         e.preventDefault();
         let data = serializeConvertToJson($("#register-form"));
         $.ajax({
-            url : "<%=baseURL%>/register",
+            url : "<%=baseURL%>/kayit-ol",
             type : "POST",
             data : data,
             success : (response) => {
@@ -91,7 +91,7 @@
                     $(".rs-contact .container").append(`<div class="text-center">
                         <h4 class="text-danger">${response.msg}</h4>
                         <div class="btn-part text-center">
-                            <a href="<%=baseURL%>/login" class="form-group mb-0 d-flex justify-content-center align-items-center">
+                            <a href="<%=baseURL%>/giris-yap" class="form-group mb-0 d-flex justify-content-center align-items-center">
                                 <input class="readon submit" type="submit" value="Giriş Yap">
                             </a>
                         </div>

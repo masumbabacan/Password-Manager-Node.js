@@ -17,7 +17,7 @@ router.post('/', urlencodedParser,function(req, res, next) {
 
 router.get('/logout', function(req, res, next) {
     logOut(req, res, next);
-    res.redirect("/login");
+    res.redirect("/giris-yap");
 });
 module.exports = router;
 
@@ -35,14 +35,14 @@ function login(req,res,next) {
                     return res.status(200).jsonp({
                         status : "success",
                         msg : "giriş başarılı",
-                        redirect: "home",
+                        redirect: "anasayfa",
                     })
                 }else{
                     return res.status(200).jsonp({
                         status : "emailVerification", 
                         msg : "Email Adresinizi doğrulamanız gerekmektedir",
                         data : user.email,
-                        redirect : "emailVerification",
+                        redirect : "email-dogrulama",
                     })
                 }
             }else{

@@ -39,14 +39,14 @@ app.use(express.static(__dirname + '/public'));
 app.locals.baseURL = "http://localhost:3000"
 
 app.use('/', indexRouter);
-app.use('/register', registerRouter);
-app.use('/login', loginRouter);
-app.use('/forgotPassword', forgotRouter);
-app.use('/emailVerification', emailVerificationRouter);
-app.use('/resetCode', resetCodeRouter);
+app.use('/kayit-ol', registerRouter);
+app.use('/giris-yap', loginRouter);
+app.use('/sifremi-unuttum', forgotRouter);
+app.use('/email-dogrulama', emailVerificationRouter);
+app.use('/sifre-sifirlama', resetCodeRouter);
 
-app.use('/home', homeRouter);
-app.use('/myAccounts', myAccountsRouter);
+app.use('/anasayfa', homeRouter);
+app.use('/hesaplarim', myAccountsRouter);
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

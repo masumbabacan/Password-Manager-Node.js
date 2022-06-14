@@ -24,7 +24,7 @@ router.get('/', function (req, res, next) {
         let user = req.session.user;
         res.render("user/home", { user: user });
     } else {
-        res.redirect("login");
+        res.redirect("giris-yap");
     }
 });
 

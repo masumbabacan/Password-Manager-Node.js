@@ -30,7 +30,7 @@
                                                     <input class="from-control" type="password" id="password" name="password" placeholder="Şifre" required="">
                                                 </div>
                                                 <div class="col-lg-12 col-md-12 col-sm-12 mb-30 text-right">
-                                                    <a style="cursor:pointer;" href="<%=baseURL%>/forgotPassword">
+                                                    <a style="cursor:pointer;" href="<%=baseURL%>/sifremi-unuttum">
                                                         <i class="fa fa-key"></i>
                                                         Şifremi unuttum
                                                     </a>
@@ -70,7 +70,7 @@
         e.preventDefault();
         let data = serializeConvertToJson($("#login-form"));
         $.ajax({
-            url : "<%=baseURL%>/login",
+            url : "<%=baseURL%>/giris-yap",
             type : "POST",
             data : data,
             success : (response) => {

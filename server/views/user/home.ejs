@@ -16,7 +16,7 @@
                                                     <small class="text-muted float-end">Doğru girdiğinizden emin olun</small>
                                                 </div>
                                                 <div class="card-body">
-                                                    <form id="account-form" method="post">
+                                                    <form id="account-form" method="post" autocomplete="off">
                                                         <div class="mb-3">
                                                             <label class="form-label" for="basic-default-company">Hesap Adı</label>
                                                             <input type="text" class="form-control" name="description" id="basic-default-company" placeholder="örn: Twitter/E-devlet" />
@@ -50,7 +50,7 @@
     $("#account-form").submit(function(e) {
         e.preventDefault();    
         $.ajax({
-            url: "<%=baseURL%>/home/createAccount",
+            url: "<%=baseURL%>/anasayfa/createAccount",
             type: 'POST',
             data: $(this).serialize(),
             success: function (response) {

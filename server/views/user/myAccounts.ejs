@@ -42,7 +42,7 @@
     $("#password-check-form").submit(function(e) {
         e.preventDefault();    
         $.ajax({
-            url: "<%=baseURL%>/myAccounts/passwordCheck",
+            url: "<%=baseURL%>/hesaplarim/passwordCheck",
             type: 'POST',
             data: $(this).serialize(),
             success: function (response) {
@@ -92,7 +92,7 @@
 
     $(document).on("click",".deleteAccount",(e) => {
 
-        $.post("<%=baseURL%>/myAccounts/deleteAccount",{ data : $(e.currentTarget).attr("data-id") }, (response) => {
+        $.post("<%=baseURL%>/hesaplarim/deleteAccount",{ data : $(e.currentTarget).attr("data-id") }, (response) => {
             Swal.fire({
                 icon: response.status,
                 text: response.msg

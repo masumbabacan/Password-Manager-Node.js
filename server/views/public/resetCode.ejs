@@ -68,7 +68,7 @@
         e.preventDefault();
         let data = serializeConvertToJson($("#resetCode-form"));
         $.ajax({
-            url : "<%=baseURL%>/resetCode",
+            url : "<%=baseURL%>/sifre-sifirlama",
             type : "POST",
             data : data,
             success : (response) => {
